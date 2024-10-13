@@ -17,6 +17,7 @@ import type {Place, PlaceResult} from '../../utils/googlemaps_types.js';
 import {isNotAvailableError, isPlaceResult, makePlaceFromPlaceResult} from '../../utils/place_utils.js';
 import {PlaceAttribution} from '../place_attribution/place_attribution.js';
 import {type PlaceConsumerRegistration, placeConsumerRegistrationContext, placeContext, PlaceDataConsumer} from '../place_data_consumer.js';
+import {setStringLiterals} from  '../../utils/localize.js';
 
 import {CachedPlaceLookup} from './cached_place_lookup.js';
 
@@ -145,6 +146,152 @@ export class PlaceDataProvider extends BaseComponent {
       } catch (error: unknown) {
         this.handleError(error);
       }
+    }
+    if (changedProperties.has('language')) {
+      try {
+        this.localize();
+      } catch (error: unknown) {
+        this.handleError(error);
+      }
+    }
+  }
+
+  private localize() {
+    if (this.language === "en")
+    {
+      setStringLiterals({});
+    }
+    else if (this.language === "de")
+    {
+      setStringLiterals({'LOCATOR_BACK_BUTTON_CTA': 'Zurück'});
+      setStringLiterals({'LOCATOR_LIST_HEADER': 'Finden Sie einen Standort in Ihrer Nähe'});
+      setStringLiterals({'LOCATOR_LIST_SUBHEADING': 'Alle Standorte'});
+      setStringLiterals({'LOCATOR_LIST_SUBHEADING_WITH_SEARCH': 'Orte in Ihrer Nähe'});
+      setStringLiterals({'LOCATOR_SEARCH_LOCATION_MARKER_TITLE': 'Mein Standort'});
+      setStringLiterals({'LOCATOR_SEARCH_PROMPT': 'Geben Sie Ihre Adresse oder Postleitzahl ein'});
+      setStringLiterals({'LOCATOR_VIEW_DETAILS_CTA': 'Details anzeigen'});
+      setStringLiterals({'PLACE_CLEAR_ARIA_LABEL': 'Löschen'});
+      setStringLiterals({'PLACE_CLOSED': 'Geschlossen'});
+      setStringLiterals({'PLACE_CLOSED_PERMANENTLY': 'Dauerhaft geschlossen'});
+      setStringLiterals({'PLACE_CLOSED_TEMPORARILY': 'Vorübergehend geschlossen'});
+      setStringLiterals({'PLACE_CLOSES': (closingTime) => `Schließt ${closingTime}`});
+      setStringLiterals({'PLACE_HAS_DELIVERY': 'Lieferung'});
+      setStringLiterals({'PLACE_HAS_DINE_IN': 'Speisen vor Ort'});
+      setStringLiterals({'PLACE_HAS_TAKEOUT': 'Mitnahme'});
+      setStringLiterals({'PLACE_NO_DELIVERY': 'Keine Lieferung'});
+      setStringLiterals({'PLACE_NO_DINE_IN': 'Keine Speisen vor Ort'});
+      setStringLiterals({'PLACE_NO_TAKEOUT': 'Keine Mitnahme'});
+      setStringLiterals({'PLACE_OPEN_ALWAYS': '24 Stunden geöffnet'});
+      setStringLiterals({'PLACE_OPEN_NOW': 'Jetzt geöffnet'});
+      setStringLiterals({'PLACE_OPENING_HOURS_DEFAULT_SUMMARY': 'Öffnungszeiten ansehen'});
+      setStringLiterals({'PLACE_OPENING_HOURS_ARIA_LABEL': 'Wöchentliche Öffnungszeiten'});
+      setStringLiterals({'PLACE_OPENS': (openingTime) => `Öffnet ${openingTime}`});
+      setStringLiterals({'PLACE_OPERATIONAL': 'Im Betrieb'});
+      setStringLiterals({'PLACE_PHOTO_ALT': (placeName) => `Foto von Ort ${placeName || 'place'}`});
+      setStringLiterals({'PLACE_PHOTO_ATTRIBUTION_PREFIX': 'Foto von'});
+      setStringLiterals({'PLACE_PHOTO_BACK_ARIA_LABEL': 'Zurück'});
+      setStringLiterals({'PLACE_PHOTO_NEXT_ARIA_LABEL': 'Nächstes'});
+      setStringLiterals({'PLACE_PHOTO_PREV_ARIA_LABEL': 'Vorheriges'});
+      setStringLiterals({'PLACE_PHOTO_TILE_ARIA_LABEL': (i) => `Öffne Foto ${i}`});
+      setStringLiterals({'PLACE_RATING_ARIA_LABEL': (rating) => (rating === 1) ? '1 Stern' : `${rating} Sterne`});
+      setStringLiterals({'PLACE_REVIEWS_AUTHOR_PHOTO_ALT': (author) => `Foto von ${author || 'Rezensent'}`});
+      setStringLiterals({'PLACE_REVIEWS_MORE': 'Weitere Bewertungen'});
+      setStringLiterals({'PLACE_REVIEWS_SECTION_CAPTION': 'Am relevantesten'});
+      setStringLiterals({'PLACE_REVIEWS_SECTION_HEADING': 'Bewertungen von Google-Nutzern'});
+      setStringLiterals({'PLACE_TYPE': (placeType) => {
+          // Example: "hardware_store" -> "Hardware store"
+          if (placeType === '')
+            return '';
+          const capitalized = placeType[0].toUpperCase() + placeType.slice(1);
+          return capitalized.replace(/_/g, ' ');}});
+    }
+    else if (this.language === "fr")
+    {
+      setStringLiterals({'LOCATOR_BACK_BUTTON_CTA': 'Dos'});
+      setStringLiterals({'LOCATOR_LIST_HEADER': 'Trouver un emplacement près de chez vous'});
+      setStringLiterals({'LOCATOR_LIST_SUBHEADING': 'Tous les emplacements'});
+      setStringLiterals({'LOCATOR_LIST_SUBHEADING_WITH_SEARCH': 'Lieux près de chez vous'});
+      setStringLiterals({'LOCATOR_SEARCH_LOCATION_MARKER_TITLE': 'Ma position'});
+      setStringLiterals({'LOCATOR_SEARCH_PROMPT': 'Entrez votre adresse ou votre code postal'});
+      setStringLiterals({'LOCATOR_VIEW_DETAILS_CTA': 'Afficher les détails'});
+      setStringLiterals({'PLACE_CLEAR_ARIA_LABEL': 'Supprimer'});
+      setStringLiterals({'PLACE_CLOSED': 'Fermé'});
+      setStringLiterals({'PLACE_CLOSED_PERMANENTLY': 'Fermé définitivement'});
+      setStringLiterals({'PLACE_CLOSED_TEMPORARILY': 'Fermé temporairement'});
+      setStringLiterals({'PLACE_CLOSES': (closingTime) => `Ferme ${closingTime}`});
+      setStringLiterals({'PLACE_HAS_DELIVERY': 'Livraison'});
+      setStringLiterals({'PLACE_HAS_DINE_IN': 'Restauration sur place'});
+      setStringLiterals({'PLACE_HAS_TAKEOUT': 'Emporter'});
+      setStringLiterals({'PLACE_NO_DELIVERY': 'Pas de livraison'});
+      setStringLiterals({'PLACE_NO_DINE_IN': 'Pas de nourriture sur place'});
+      setStringLiterals({'PLACE_NO_TAKEOUT': 'Pas de plats à emporter'});
+      setStringLiterals({'PLACE_OPEN_ALWAYS': 'Ouvert 24 heures'});
+      setStringLiterals({'PLACE_OPEN_NOW': 'Maintenant ouvert'});
+      setStringLiterals({'PLACE_OPENING_HOURS_DEFAULT_SUMMARY': 'Voir les horaires d\'ouverture'});
+      setStringLiterals({'PLACE_OPENING_HOURS_ARIA_LABEL': 'Horaires d\'ouverture hebdomadaires'});
+      setStringLiterals({'PLACE_OPENS': (openingTime) => `Ouvre ${openingTime}`});
+      setStringLiterals({'PLACE_OPERATIONAL': 'Opérationnel'});
+      setStringLiterals({'PLACE_PHOTO_ALT': (placeName) => `Photo de l'emplacement ${placeName || 'place'}`});
+      setStringLiterals({'PLACE_PHOTO_ATTRIBUTION_PREFIX': 'Photo de'});
+      setStringLiterals({'PLACE_PHOTO_BACK_ARIA_LABEL': 'Dos'});
+      setStringLiterals({'PLACE_PHOTO_NEXT_ARIA_LABEL': 'Suivant'});
+      setStringLiterals({'PLACE_PHOTO_PREV_ARIA_LABEL': 'Précédent'});
+      setStringLiterals({'PLACE_PHOTO_TILE_ARIA_LABEL': (i) => `Ouvrir la photo ${i}`});
+      setStringLiterals({'PLACE_RATING_ARIA_LABEL': (rating) => (rating === 1) ? '1 Étoile' : `${rating} Étoiles`});
+      setStringLiterals({'PLACE_REVIEWS_AUTHOR_PHOTO_ALT': (author) => `Photo de ${author || 'critique'}`});
+      setStringLiterals({'PLACE_REVIEWS_MORE': 'Plus d\'avis'});
+      setStringLiterals({'PLACE_REVIEWS_SECTION_CAPTION': 'Le plus pertinent'});
+      setStringLiterals({'PLACE_REVIEWS_SECTION_HEADING': 'Avis des utilisateurs de Google'});
+      setStringLiterals({'PLACE_TYPE': (placeType) => {
+          // Example: "hardware_store" -> "Hardware store"
+          if (placeType === '')
+            return '';
+          const capitalized = placeType[0].toUpperCase() + placeType.slice(1);
+          return capitalized.replace(/_/g, ' ');}});
+    }
+    else if (this.language === "it")
+    {
+      setStringLiterals({'LOCATOR_BACK_BUTTON_CTA': 'Indietro'});
+      setStringLiterals({'LOCATOR_LIST_HEADER': 'Trova una posizione vicino a te'});
+      setStringLiterals({'LOCATOR_LIST_SUBHEADING': 'Tutte le località'});
+      setStringLiterals({'LOCATOR_LIST_SUBHEADING_WITH_SEARCH': 'Luoghi vicino a te'});
+      setStringLiterals({'LOCATOR_SEARCH_LOCATION_MARKER_TITLE': 'La mia posizione'});
+      setStringLiterals({'LOCATOR_SEARCH_PROMPT': 'Inserisci il tuo indirizzo o codice postale'});
+      setStringLiterals({'LOCATOR_VIEW_DETAILS_CTA': 'Mostra dettagli'});
+      setStringLiterals({'PLACE_CLEAR_ARIA_LABEL': 'Eliminare'});
+      setStringLiterals({'PLACE_CLOSED': 'Chiuso'});
+      setStringLiterals({'PLACE_CLOSED_PERMANENTLY': 'Chiuso definitivamente'});
+      setStringLiterals({'PLACE_CLOSED_TEMPORARILY': 'Temporaneamente chiuso'});
+      setStringLiterals({'PLACE_CLOSES': (closingTime) => `Chiude ${closingTime}`});
+      setStringLiterals({'PLACE_HAS_DELIVERY': 'Consegna'});
+      setStringLiterals({'PLACE_HAS_DINE_IN': 'Pranzo sul posto'});
+      setStringLiterals({'PLACE_HAS_TAKEOUT': 'Porta via'});
+      setStringLiterals({'PLACE_NO_DELIVERY': 'Nessuna consegna'});
+      setStringLiterals({'PLACE_NO_DINE_IN': 'Nessun cibo in loco'});
+      setStringLiterals({'PLACE_NO_TAKEOUT': 'Niente cibo da asporto'});
+      setStringLiterals({'PLACE_OPEN_ALWAYS': 'Aperto 24 ore'});
+      setStringLiterals({'PLACE_OPEN_NOW': 'Adesso aperto'});
+      setStringLiterals({'PLACE_OPENING_HOURS_DEFAULT_SUMMARY': 'Visualizza gli orari di apertura'});
+      setStringLiterals({'PLACE_OPENING_HOURS_ARIA_LABEL': 'Orari di apertura settimanali'});
+      setStringLiterals({'PLACE_OPENS': (openingTime) => `Si apre ${openingTime}`});
+      setStringLiterals({'PLACE_OPERATIONAL': 'Operativo'});
+      setStringLiterals({'PLACE_PHOTO_ALT': (placeName) => `Foto dalla posizione ${placeName || 'place'}`});
+      setStringLiterals({'PLACE_PHOTO_ATTRIBUTION_PREFIX': 'Foto del'});
+      setStringLiterals({'PLACE_PHOTO_BACK_ARIA_LABEL': 'Indietro'});
+      setStringLiterals({'PLACE_PHOTO_NEXT_ARIA_LABEL': 'Prossimo'});
+      setStringLiterals({'PLACE_PHOTO_PREV_ARIA_LABEL': 'Precedente'});
+      setStringLiterals({'PLACE_PHOTO_TILE_ARIA_LABEL': (i) => `Apri foto ${i}`});
+      setStringLiterals({'PLACE_RATING_ARIA_LABEL': (rating) => (rating === 1) ? '1 Stella' : `${rating} Stelle`});
+      setStringLiterals({'PLACE_REVIEWS_AUTHOR_PHOTO_ALT': (author) => `Foto del ${author || 'recensore'}`});
+      setStringLiterals({'PLACE_REVIEWS_MORE': 'Altre recensioni'});
+      setStringLiterals({'PLACE_REVIEWS_SECTION_CAPTION': 'Più rilevante'});
+      setStringLiterals({'PLACE_REVIEWS_SECTION_HEADING': 'Recensioni degli utenti di Google'});
+      setStringLiterals({'PLACE_TYPE': (placeType) => {
+          // Example: "hardware_store" -> "Hardware store"
+          if (placeType === '')
+            return '';
+          const capitalized = placeType[0].toUpperCase() + placeType.slice(1);
+          return capitalized.replace(/_/g, ' ');}});
     }
   }
 
