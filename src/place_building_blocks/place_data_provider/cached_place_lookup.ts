@@ -9,16 +9,21 @@ import type {Place} from '../../utils/googlemaps_types.js';
 import {LRUMap} from '../../utils/lru_map.js';
 
 
+type PlaceData = [
+  id: string,
+  language: string|null|undefined
+];
+
 /**
  * Makes a promise that will resolve to a new `Place` with the given ID, or
  * reject with an error if the `Place` constructor throws one. This must be done
  * asynchronously due to the loading of the `Place` constructor from the API.
  */
 async function makeNewPlacePromise(
-    id: string, consumer?: HTMLElement): Promise<Place> {
+    id: string, language: string|undefined, consumer?: HTMLElement): Promise<Place> {
   const {Place} = await APILoader.importLibrary('places', consumer) as
       typeof google.maps.places;
-  return new Place({id}) as Place;
+  return new Place({id: id, requestedLanguage: language}) as Place;
 }
 
 /**
@@ -26,7 +31,7 @@ async function makeNewPlacePromise(
  * `Place` objects as needed when they do not exist already.
  */
 export class CachedPlaceLookup {
-  private readonly cache: LRUMap<string, Promise<Place>>;
+  private readonly cache: LRUMap<PlaceData, Promise<Place>>;
 
   /**
    * @param capacity - The maximum number of `Place` objects to keep in the
@@ -46,12 +51,12 @@ export class CachedPlaceLookup {
    * Note: The returned promise will be rejected with an error from the `Place`
    * constructor if `id` is an empty string.
    */
-  getPlace(id: string): Promise<Place> {
-    const cachedPlacePromise = this.cache.get(id);
+  getPlace(id: string, language: string|undefined): Promise<Place> {
+    const cachedPlacePromise = this.cache.get([id, language]);
     if (cachedPlacePromise) return cachedPlacePromise;
 
-    const newPlacePromise = makeNewPlacePromise(id, this.consumer);
-    this.cache.set(id, newPlacePromise);
+    const newPlacePromise = makeNewPlacePromise(id, language, this.consumer);
+    this.cache.set([id, language], newPlacePromise);
     return newPlacePromise;
   }
 
@@ -60,6 +65,6 @@ export class CachedPlaceLookup {
    * one exists already.
    */
   updatePlace(place: Place) {
-    this.cache.set(place.id, Promise.resolve(place));
+    this.cache.set([place.id, place.requestedLanguage], Promise.resolve(place));
   }
 }

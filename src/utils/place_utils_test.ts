@@ -150,7 +150,7 @@ describe('makePlaceFromPlaceResult', () => {
   });
 
   it('copies all equivalent fields from PlaceResult to Place', async () => {
-    const place = await makePlaceFromPlaceResult(SAMPLE_FAKE_PLACE_RESULT);
+    const place = await makePlaceFromPlaceResult(SAMPLE_FAKE_PLACE_RESULT, undefined);
 
     expect(place.addressComponents)
         .toEqual(SAMPLE_FAKE_PLACE.addressComponents);
@@ -198,7 +198,7 @@ describe('makePlaceFromPlaceResult', () => {
 
   it('treats fields missing from PlaceResult as undefined', async () => {
     const place =
-        await makePlaceFromPlaceResult({geometry: {}, photos: undefined});
+        await makePlaceFromPlaceResult({geometry: {}, photos: undefined}, undefined);
 
     expect(place.addressComponents).toBeUndefined();
     expect(place.adrFormatAddress).toBeUndefined();
@@ -236,7 +236,7 @@ describe('makePlaceFromPlaceResult', () => {
       },
     };
     env.importLibrarySpy?.and.returnValue(Promise.resolve(fakePlacesLibrary));
-    const place = await makePlaceFromPlaceResult(SAMPLE_FAKE_PLACE_RESULT);
+    const place = await makePlaceFromPlaceResult(SAMPLE_FAKE_PLACE_RESULT, undefined);
 
     await place.fetchFields(
         {fields: ['displayName', 'location', 'photos', 'servesLunch']});
@@ -275,7 +275,7 @@ describe('makePlaceFromPlaceResult', () => {
        env.importLibrarySpy?.and.resolveTo(fakePlacesLibrary);
 
        const place = await makePlaceFromPlaceResult(
-           {place_id: '123', url: 'http://foo/bar', rating: 3.5});
+           {place_id: '123', url: 'http://foo/bar', rating: 3.5}, undefined);
 
        // NOTE: `attributions` -> `html_attributions` should *not* be requested,
        // as the Places Details API considers it an invalid field mask.
@@ -299,7 +299,7 @@ describe('makePlaceFromPlaceResult', () => {
       },
     };
     env.importLibrarySpy?.and.resolveTo(fakePlacesLibrary);
-    const place = await makePlaceFromPlaceResult({place_id: '123'});
+    const place = await makePlaceFromPlaceResult({place_id: '123'}, undefined);
 
     expect(await place.isOpen()).toBe(true);
   });
@@ -316,7 +316,7 @@ describe('makePlaceFromPlaceResult', () => {
          },
        };
        env.importLibrarySpy?.and.resolveTo(fakePlacesLibrary);
-       const place = await makePlaceFromPlaceResult({place_id: '123'});
+       const place = await makePlaceFromPlaceResult({place_id: '123'}, undefined);
 
        expect(await place.isOpen()).toBe(undefined);
      });

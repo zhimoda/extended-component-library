@@ -386,7 +386,7 @@ export class PlacePicker extends BaseComponent {
       const result = autocomplete.getPlace();
       if (result?.place_id) {
         this.disableSearch = true;
-        this.valueInternal = await makePlaceFromPlaceResult(result, this);
+        this.valueInternal = await makePlaceFromPlaceResult(result, undefined, this);
       } else {
         await this.handleSearch();
       }
@@ -425,7 +425,7 @@ export class PlacePicker extends BaseComponent {
         const results = await this.searchWithFindPlaceFromQuery(findRequest);
         places = [];
         for (const placeResult of results) {
-          places.push(await makePlaceFromPlaceResult(placeResult, this));
+          places.push(await makePlaceFromPlaceResult(placeResult, undefined, this));
           break;
         }
       } else {

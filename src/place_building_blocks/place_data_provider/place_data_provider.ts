@@ -85,6 +85,10 @@ export class PlaceDataProvider extends BaseComponent {
   @property({type: String, hasChanged: () => true})
   place?: string|Place|PlaceResult;
 
+
+  @property({type: String, hasChanged: () => true})
+  language?: string;
+
   /**
    * @ignore
    * Place consumer registration functions, passed to child `PlaceDataConsumer`s
@@ -135,7 +139,7 @@ export class PlaceDataProvider extends BaseComponent {
   }
 
   protected override async updated(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has('place')) {
+    if (changedProperties.has('place') || changedProperties.has('language')) {
       try {
         await this.updatePlace();
       } catch (error: unknown) {
@@ -154,9 +158,9 @@ export class PlaceDataProvider extends BaseComponent {
       return;
     } else if (typeof this.place === 'string') {
       this.contextPlace =
-          await PlaceDataProvider.placeLookup.getPlace(this.place);
+          await PlaceDataProvider.placeLookup.getPlace(this.place, this.language);
     } else if (isPlaceResult(this.place)) {
-      this.contextPlace = await makePlaceFromPlaceResult(this.place, this);
+      this.contextPlace = await makePlaceFromPlaceResult(this.place, this.language, this);
       PlaceDataProvider.placeLookup.updatePlace(this.contextPlace);
     } else {  // this.place is a Place
       this.contextPlace = this.place;
@@ -182,7 +186,7 @@ export class PlaceDataProvider extends BaseComponent {
           // shimmed version, taking advantage of the fallback capabilities of
           // `makePlaceFromPlaceResult()`.
           this.contextPlace =
-              await makePlaceFromPlaceResult({place_id: this.contextPlace.id});
+              await makePlaceFromPlaceResult({place_id: this.contextPlace.id}, this.contextPlace.requestedLanguage);
           PlaceDataProvider.placeLookup.updatePlace(this.contextPlace);
           await this.contextPlace.fetchFields({fields});
         } else {

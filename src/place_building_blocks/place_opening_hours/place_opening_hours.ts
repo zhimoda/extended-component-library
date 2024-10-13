@@ -197,7 +197,7 @@ export class PlaceOpeningHours extends PlaceDataConsumer {
         <span>${
           this.getMsg(
               'PLACE_CLOSES',
-              formatTimeWithWeekdayMaybe(closePoint!, closeDate!))}</span>
+              formatTimeWithWeekdayMaybe(closePoint!, closeDate!, new Date(), place))}</span>
       `;
     } else if (status === NextCloseTimeStatus.NOT_OPEN_NOW) {
       // In this case, the summary content isn't displayed by the Place Boolean
@@ -214,7 +214,7 @@ export class PlaceOpeningHours extends PlaceDataConsumer {
       nextOpenInfo = html` · <span>${
           this.getMsg(
               'PLACE_OPENS',
-              formatTimeWithWeekdayMaybe(openPoint!, openDate!))}</span>`;
+              formatTimeWithWeekdayMaybe(openPoint!, openDate!, new Date(), place))}</span>`;
     } else if (status === NextOpenTimeStatus.ALREADY_OPEN) {
       // In this case, the summary content isn't displayed by the Place Boolean
       // Field component anyway. Return the default summary.

@@ -106,11 +106,11 @@ export function renderAttribution(text: string, url: string|null) {
  * equivalent fields in the `PlaceResult` object, if they are defined.
  */
 export async function makePlaceFromPlaceResult(
-    placeResult: PlaceResult, consumer?: HTMLElement): Promise<Place> {
+    placeResult: PlaceResult, language: string | null | undefined, consumer?: HTMLElement): Promise<Place> {
   const placesLibrary = await APILoader.importLibrary('places', consumer) as
       typeof google.maps.places;
   const place = new placesLibrary.Place(
-                    {id: placeResult.place_id ?? 'PLACE_ID_MISSING'}) as Place;
+                    {id: placeResult.place_id ?? 'PLACE_ID_MISSING', requestedLanguage: language}) as Place;
   let predefinedFields = convertToPlaceFields(placeResult);
 
   // Override Place object's getters to return data from PlaceResult if defined.

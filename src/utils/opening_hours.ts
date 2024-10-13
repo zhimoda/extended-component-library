@@ -17,7 +17,7 @@ type OpeningHoursPoint = google.maps.places.OpeningHoursPoint;
  * Formats a relative point in time according to the browser's locale format.
  */
 function formatPointTime(
-    point: OpeningHoursPoint, includeWeekday = false): string {
+    point: OpeningHoursPoint, includeWeekday = false, place?: Place): string {
   // Choose an arbitrary `Date`, then set the fields needed for formatting
   // (weekday and time).
   const date = new Date();
@@ -27,7 +27,8 @@ function formatPointTime(
   date.setSeconds(0);
 
   return date.toLocaleString(
-      /* locales= */ undefined, {
+      place ? (place.requestedLanguage === null ? undefined: place.requestedLanguage) : undefined,
+      {
         hour: 'numeric',
         minute: 'numeric',
         weekday: includeWeekday ? 'short' : undefined
@@ -43,10 +44,11 @@ function formatPointTime(
  * @param absolutePoint The instant in time corresponding to `point`, i.e. a
  *     `Date` object
  * @param now Used to determine if `absolutePoint` is coming soon
+ * @param place Used to determine language to format a date
  */
 export function formatTimeWithWeekdayMaybe(
-    point: OpeningHoursPoint, absolutePoint: Date, now = new Date()): string {
-  return formatPointTime(point, !isSoon(absolutePoint, now));
+    point: OpeningHoursPoint, absolutePoint: Date, now = new Date(), place?: Place): string {
+  return formatPointTime(point, !isSoon(absolutePoint, now), place);
 }
 
 /**
