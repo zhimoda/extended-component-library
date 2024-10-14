@@ -149,12 +149,12 @@ export class PlaceOverview extends BaseComponent {
       border-top: ${GMPX_BORDER_SEPARATOR};
     }
 
-    .section.first > * { 
-        //margin-bottom: ${getTypeScaleSizeFromPx(12)};
+    .section.first > * {
+      margin-bottom: ${getTypeScaleSizeFromPx(12)};
     }
 
-    .block { 
-        //margin: ${getTypeScaleSizeFromPx(18)} ${getTypeScaleSizeFromPx(20)};
+    .block {
+      margin: ${getTypeScaleSizeFromPx(18)} ${getTypeScaleSizeFromPx(20)};
     }
 
     .header {
@@ -393,7 +393,7 @@ export class PlaceOverview extends BaseComponent {
                   </gmpx-place-field-text>
                 </div>
                 ${this.size === 'x-small' ? this.renderCondensedSummary() :
-                                            this.renderSummaryCustom()}
+                                            this.renderSummary()}
               </div>
               <div>${this.renderHeaderSuffixContent()}</div>
             </div>
@@ -473,7 +473,6 @@ export class PlaceOverview extends BaseComponent {
     </div>
   `;
 
-  // @ts-ignore
   private readonly renderSummary = () => html`
     <div class="summary body">
       <div class="line">
@@ -522,21 +521,6 @@ export class PlaceOverview extends BaseComponent {
             <span slot="false">${this.getMsg('PLACE_NO_DELIVERY')}</span>
           </gmpx-place-field-boolean>
         </gmpx-optional-data-container-internal>
-      </div>
-    </div>
-  `;
-
-  private readonly renderSummaryCustom = () => html`
-    <div class="summary body">
-      <div class="line">
-        <gmpx-place-rating></gmpx-place-rating>
-        <gmpx-optional-data-container-internal>
-          (<gmpx-place-field-text field="userRatingCount">
-          </gmpx-place-field-text>)
-        </gmpx-optional-data-container-internal>
-      </div>
-      <div class="line">
-        <gmpx-place-opening-hours summary-only></gmpx-place-opening-hours>
       </div>
     </div>
   `;
