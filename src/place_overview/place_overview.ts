@@ -36,7 +36,7 @@ import type {LatLng, LatLngLiteral, Place, PlaceResult} from '../utils/googlemap
 
 /** Names of sizes supported by the Place Overview component. */
 const PLACE_OVERVIEW_SIZES =
-    Object.freeze(['x-small', 'small', 'medium', 'large', 'x-large'] as const);
+    Object.freeze(['x-small', 'small', 'medium', 'large', 'x-large', 'custom'] as const);
 
 const GOOGLE_LOGO_SVG = html`
   <svg width="56" height="20" fill="none" viewBox="0 0 56 20" xmlns="http://www.w3.org/2000/svg">
@@ -339,7 +339,7 @@ export class PlaceOverview extends BaseComponent {
    * Data](https://developers.google.com/maps/documentation/javascript/place-data-fields#atmosphere).
    */
   @property({reflect: true, type: String})
-  size: 'x-small'|'small'|'medium'|'large'|'x-large' = 'x-large';
+  size: 'x-small'|'small'|'medium'|'large'|'x-large'|'custom' = 'x-large';
 
   /**
    * Travel mode to be used when computing transit time from `travel-origin`.
@@ -377,6 +377,16 @@ export class PlaceOverview extends BaseComponent {
   protected readonly getMsg = LocalizationController.buildLocalizer(this);
 
   protected override render() {
+    if (this.size === 'custom') {
+      return this.renderCustom();
+    }
+    else
+    {
+      return this.renderNonCustom();
+    }
+  }
+
+  private renderNonCustom() {
     // clang-format off
     return html`
       <gmpx-place-data-provider
@@ -393,7 +403,7 @@ export class PlaceOverview extends BaseComponent {
                   </gmpx-place-field-text>
                 </div>
                 ${this.size === 'x-small' ? this.renderCondensedSummary() :
-                                            this.renderSummary()}
+        this.renderSummary()}
               </div>
               <div>${this.renderHeaderSuffixContent()}</div>
             </div>
@@ -433,6 +443,63 @@ export class PlaceOverview extends BaseComponent {
     `;
     // clang-format on
   }
+
+  private renderCustom() {
+    // clang-format off
+    return html`
+      <gmpx-place-data-provider
+        .autoFetchDisabled=${this.autoFetchDisabled}
+        .place=${this.place ?? this.contextPlace}
+        @gmpx-requesterror=${this.forwardRequestError}
+      >
+        <div class="container">
+          <div class="header" style="display: flex; flex-direction: column;">
+            <div></div>
+            <gmpx-place-photo-gallery class="gallery" max-tiles="2"></gmpx-place-photo-gallery>
+            <div class="summary body">
+              <div class="line">
+                <div class=${this.getDisplayNameClass()} style="font-size: 15px; line-height: 18px;">
+                  <gmpx-place-field-text field="displayName"></gmpx-place-field-text>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; gap: 5px;">
+                <div>
+                  <div class="line">
+                    <gmpx-place-rating></gmpx-place-rating>
+                    <gmpx-optional-data-container-internal>
+                      (<gmpx-place-field-text field="userRatingCount">
+                    </gmpx-place-field-text>)
+                    </gmpx-optional-data-container-internal>
+                  </div>
+                  <div class="line">
+                    <gmpx-place-opening-hours summary-only></gmpx-place-opening-hours>
+                  </div>
+                </div>
+                <gmpx-place-directions-button condensed></gmpx-place-directions-button>
+              </div>
+            </div>
+          </div>
+          <gmpx-place-attribution class="section caption attribution">
+          </gmpx-place-attribution>
+
+          ${when(!this.googleLogoAlreadyDisplayed, () => html`
+            <div class=${this.size === 'x-large' ? 'section' : ''}>
+              <div class="logo">${GOOGLE_LOGO_SVG}</div>
+            </div>
+          `)}
+        </div>
+        <div slot="error">
+          <div class="title-large">Oops! Something went wrong.</div>
+          <div class="caption">
+            Failed to load data about the specified Place.
+            See the JavaScript console for technical details.
+          </div>
+        </div>
+      </gmpx-place-data-provider>
+    `;
+    // clang-format on
+  }
+
 
   private getDisplayNameClass(): string {
     if (this.size === 'x-small') {
